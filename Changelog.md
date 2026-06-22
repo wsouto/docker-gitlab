@@ -9,6 +9,11 @@ gitlab.com/gitlab-org/gitlab-foss/blob/master/CHANGELOG.md) for the list of chan
 - gitaly: upgrade to v19.1.0
 - gitlab-pages: upgrade to v19.1.0
 - gitlab-shell: upgrade to v14.54.0
+- ubuntu: upgrade to resolute (26.04)
+- packages: removed all third-party apt repositories (git-core PPA, postgresql.org, nodesource, yarnpkg, nginx.org); all packages now from Ubuntu repositories
+- postgresql: removed postgresql-client-17, keeping postgresql-client-18 only
+- yarn: switched from yarnpkg Debian repo to npm install for Yarn Classic
+- libncurses: replaced libncurses5-dev with libncurses-dev
 
 ## 19.0.2
 

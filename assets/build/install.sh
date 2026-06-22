@@ -24,7 +24,7 @@ export GOROOT PATH
 BUILD_DEPENDENCIES="gcc g++ make patch pkg-config cmake \
   libc6-dev \
   libpq-dev zlib1g-dev libssl-dev \
-  libgdbm-dev libreadline-dev libncurses5-dev libffi-dev \
+  libgdbm-dev libreadline-dev libncurses-dev libffi-dev \
   libxml2-dev libxslt-dev libcurl4-openssl-dev libicu-dev \
   gettext libkrb5-dev \
   libexpat1-dev libz-dev libpcre2-dev build-essential git"
