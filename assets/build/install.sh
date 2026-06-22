@@ -48,9 +48,12 @@ curl -fsSL "${RUBY_PREBUILT_URL}" -o /tmp/ruby-prebuilt.tar.gz
 printf '%s %s' "${RUBY_PREBUILT_SHA256SUM}" /tmp/ruby-prebuilt.tar.gz | sha256sum -c -
 tar xzf /tmp/ruby-prebuilt.tar.gz --strip-components=1 -C /usr/local
 rm -rf /tmp/ruby-prebuilt.tar.gz /usr/local/.brew /usr/local/share/ri
+cat > /etc/gemrc <<'EOF'
+gem: --no-document
+EOF
 
 # upgrade rubygems on demand
-gem update --no-document --system "${RUBYGEMS_VERSION}"
+gem update --system "${RUBYGEMS_VERSION}"
 
 # TODO Verify, if this is necessary or not.
 # # PaX-mark ruby
