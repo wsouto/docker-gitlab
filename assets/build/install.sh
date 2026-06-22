@@ -111,6 +111,7 @@ gem install bundler:"${BUNDLER_VERSION}"
 # download golang
 echo "Downloading Go ${GOLANG_VERSION}..."
 wget -cnv https://go.dev/dl/go${GOLANG_VERSION}.linux-amd64.tar.gz -P ${GITLAB_BUILD_DIR}/
+printf '%s %s/go%s.linux-amd64.tar.gz' "${GOLANG_SOURCE_SHA256SUM}" "${GITLAB_BUILD_DIR}" "${GOLANG_VERSION}" | sha256sum -c -
 tar -xf ${GITLAB_BUILD_DIR}/go${GOLANG_VERSION}.linux-amd64.tar.gz -C /tmp/
 
 # install gitlab-shell

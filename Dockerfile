@@ -1,12 +1,15 @@
-FROM ubuntu:noble-20260509.1
+# syntax=docker/dockerfile:1
+FROM ubuntu:noble
 
 ARG VERSION=19.1.0
 
+# v19.x : minimum = 17.0, maximum = 17.x (currently 17.10, is 170010)
 ENV GITLAB_VERSION=${VERSION} \
     RUBY_VERSION=3.3.11 \
     RUBY_SOURCE_SHA256SUM="59f0fafb1a59a05dc3765117af3fa68e153eb48254708549f321c1e9e078d7a0" \
     RUBYGEMS_VERSION=4.0.14 \
     GOLANG_VERSION=1.26.4 \
+    GOLANG_SOURCE_SHA256SUM="1153d3d50e0ac764b447adfe05c2bcf08e889d42a02e0fe0259bd47f6733ad7f" \
     GITLAB_SHELL_VERSION=14.54.0 \
     GITLAB_PAGES_VERSION=19.1.0 \
     GITALY_SERVER_VERSION=19.1.0 \
@@ -17,7 +20,6 @@ ENV GITLAB_VERSION=${VERSION} \
     RAILS_ENV=production \
     NODE_ENV=production \
     NO_SOURCEMAPS=true \
-    # v19.x : minimum = 17.0, maximum = 17.x (currently 17.10, is 170010)
     POSTGRESQL_SERVER_REQUIRED_VERSION_MINIMUM=170000 \
     POSTGRESQL_SERVER_TESTED_VERSION_MAXIMUM=170010
 
@@ -28,16 +30,18 @@ ENV GITLAB_INSTALL_DIR="${GITLAB_HOME}/gitlab" \
     GITLAB_BUILD_DIR="${GITLAB_CACHE_DIR}/build" \
     GITLAB_RUNTIME_DIR="${GITLAB_CACHE_DIR}/runtime"
 
+ARG DEBIAN_FRONTEND=noninteractive
+
 RUN apt-get update \
- && DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y \
-    wget ca-certificates apt-transport-https gnupg2 \
+ && apt-get install --no-install-recommends -y \
+    wget ca-certificates gnupg2 \
  && apt-get upgrade -y \
  && rm -rf /var/lib/apt/lists/*
 
 RUN set -ex && \
     mkdir -p /etc/apt/keyrings \
  && wget --quiet -O - https://keyserver.ubuntu.com/pks/lookup?op=get\&search=0xe1dd270288b4e6030699e45fa1715d88e1df1f24 | gpg --dearmor -o /etc/apt/keyrings/git-core.gpg \
- && echo "deb [signed-by=/etc/apt/keyrings/git-core.gpg] http://ppa.launchpad.net/git-core/ppa/ubuntu noble main" >> /etc/apt/sources.list \
+ && echo "deb [signed-by=/etc/apt/keyrings/git-core.gpg] http://ppa.launchpad.net/git-core/ppa/ubuntu noble main" > /etc/apt/sources.list.d/git-core.list \
  && wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmor -o /etc/apt/keyrings/postgres.gpg \
  && echo 'deb [signed-by=/etc/apt/keyrings/postgres.gpg] http://apt.postgresql.org/pub/repos/apt/ noble-pgdg main' > /etc/apt/sources.list.d/pgdg.list \
  && wget --quiet -O - https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg \
@@ -47,17 +51,16 @@ RUN set -ex && \
  && wget --quiet -O - https://nginx.org/keys/nginx_signing.key | gpg --dearmor -o /etc/apt/keyrings/nginx-archive-keyring.gpg \
  && echo "deb [signed-by=/etc/apt/keyrings/nginx-archive-keyring.gpg] http://nginx.org/packages/ubuntu noble nginx" >> /etc/apt/sources.list.d/nginx.list \
  && printf "Package: *\nPin: origin nginx.org\nPin: release o=nginx\nPin-Priority: 900\n" >> /etc/apt/preferences.d/99nginx \
- && set -ex \
  && apt-get update \
- && DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y \
+ && apt-get install --no-install-recommends -y \
       sudo supervisor logrotate locales curl \
       meson \
       nginx openssh-server redis-tools \
       postgresql-client-17 postgresql-client-18 \
       python3 python3-docutils nodejs yarn gettext-base graphicsmagick \
       libpq5 zlib1g libyaml-dev libssl-dev libgdbm-dev libre2-dev \
-      libreadline-dev libncurses5-dev libffi-dev curl openssh-server libxml2-dev libxslt-dev \
-      libcurl4-openssl-dev libicu-dev libkrb5-dev rsync python3-docutils pkg-config cmake \
+      libreadline-dev libncurses5-dev libffi-dev libxml2-dev libxslt-dev \
+      libcurl4-openssl-dev libicu-dev libkrb5-dev rsync pkg-config cmake \
       tzdata unzip libimage-exiftool-perl libmagic1 \
  && update-locale LANG=C.UTF-8 LC_MESSAGES=POSIX \
  && locale-gen en_US.UTF-8 \
@@ -86,6 +89,9 @@ LABEL \
     org.label-schema.vcs-url="https://github.com/sameersbn/docker-gitlab.git" \
     org.label-schema.vcs-ref=${VCS_REF} \
     com.damagehead.gitlab.license=MIT
+
+HEALTHCHECK --interval=30s --timeout=10s --start-period=120s --retries=3 \
+  CMD /usr/local/sbin/healthcheck || exit 1
 
 EXPOSE 22/tcp 80/tcp 443/tcp
 
