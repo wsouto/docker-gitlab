@@ -14,6 +14,9 @@ gitlab.com/gitlab-org/gitlab-foss/blob/master/CHANGELOG.md) for the list of chan
 - postgresql: removed postgresql-client-17, keeping postgresql-client-18 only
 - yarn: switched from yarnpkg Debian repo to npm install for Yarn Classic
 - libncurses: replaced libncurses5-dev with libncurses-dev
+- ruby: switched from source compilation to prebuilt binary from jdx/ruby (reduces build time ~5-10 min)
+- ruby: removed source patch infrastructure (patches/ruby/) and `patch` from build dependencies
+- ruby: strip rdoc/ri output to reduce image size
 
 ## 19.0.2
 

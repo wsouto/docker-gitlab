@@ -10,7 +10,7 @@ GITLAB_WORKHORSE_BUILD_DIR=${GITLAB_INSTALL_DIR}/workhorse
 GITLAB_PAGES_BUILD_DIR=/tmp/gitlab-pages
 GITLAB_GITALY_BUILD_DIR=/tmp/gitaly
 
-RUBY_SRC_URL=https://cache.ruby-lang.org/pub/ruby/${RUBY_VERSION%.*}/ruby-${RUBY_VERSION}.tar.gz
+RUBY_PREBUILT_URL=https://github.com/jdx/ruby/releases/download/${RUBY_VERSION}-${RUBY_PREBUILT_REVISION}/ruby-${RUBY_VERSION}.x86_64_linux.tar.gz
 
 GEM_CACHE_DIR="${GITLAB_BUILD_DIR}/cache"
 
@@ -20,8 +20,8 @@ PATH=${GOROOT}/bin:$PATH
 export GOROOT PATH
 
 # TODO Verify, if this is necessary or not.
-# BUILD_DEPENDENCIES="gcc g++ make patch pkg-config cmake paxctl \
-BUILD_DEPENDENCIES="gcc g++ make patch pkg-config cmake \
+# BUILD_DEPENDENCIES="gcc g++ make pkg-config cmake paxctl \
+BUILD_DEPENDENCIES="gcc g++ make pkg-config cmake \
   libc6-dev \
   libpq-dev zlib1g-dev libssl-dev \
   libgdbm-dev libreadline-dev libncurses-dev libffi-dev \
@@ -42,21 +42,12 @@ exec_as_git() {
 apt-get update
 DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y ${BUILD_DEPENDENCIES}
 
-# build ruby from source
-echo "Building ruby v${RUBY_VERSION} from source..."
-PWD_ORG="$PWD"
-mkdir /tmp/ruby && cd /tmp/ruby
-curl --remote-name -Ss "${RUBY_SRC_URL}"
-printf '%s ruby-%s.tar.gz' "${RUBY_SOURCE_SHA256SUM}" "${RUBY_VERSION}" | sha256sum -c -
-tar xzf ruby-"${RUBY_VERSION}".tar.gz && cd ruby-"${RUBY_VERSION}"
-find "${GITLAB_BUILD_DIR}/patches/ruby" -name "*.patch" | while read -r patch_file; do
-  echo "Applying patch ${patch_file}"
-  patch -p1 -i "${patch_file}"
-done
-./configure --disable-install-rdoc --enable-shared
-make -j"$(nproc)"
-make install
-cd "$PWD_ORG" && rm -rf /tmp/ruby
+# install ruby from prebuilt binary
+echo "Installing ruby v${RUBY_VERSION} from prebuilt binary..."
+curl -fsSL "${RUBY_PREBUILT_URL}" -o /tmp/ruby-prebuilt.tar.gz
+printf '%s %s' "${RUBY_PREBUILT_SHA256SUM}" /tmp/ruby-prebuilt.tar.gz | sha256sum -c -
+tar xzf /tmp/ruby-prebuilt.tar.gz --strip-components=1 -C /usr/local
+rm -rf /tmp/ruby-prebuilt.tar.gz /usr/local/.brew /usr/local/share/ri
 
 # upgrade rubygems on demand
 gem update --no-document --system "${RUBYGEMS_VERSION}"
