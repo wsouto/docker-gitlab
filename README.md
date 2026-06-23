@@ -3,7 +3,7 @@
 [![CircleCI](https://circleci.com/gh/sameersbn/docker-gitlab/tree/master.svg?style=svg)](https://circleci.com/gh/sameersbn/docker-gitlab/tree/master)
 
 - [Introduction](#introduction)
-    - [Changelog](Changelog.md)
+  - [Changelog](Changelog.md)
 - [Contributing](#contributing)
 - [Team](#team)
 - [Issues](#issues)
@@ -12,62 +12,62 @@
 - [Installation](#installation)
 - [Quick Start](#quick-start)
 - [Configuration](#configuration)
-    - [Data Store](#data-store)
-    - [Database](#database)
-        - [PostgreSQL (Recommended)](#postgresql)
-            - [External PostgreSQL Server](#external-postgresql-server)
-            - [Linking to PostgreSQL Container](#linking-to-postgresql-container)
-            - [Upgrading PostgreSQL](#upgrading-postgresql)
-    - [Redis](#redis)
-        - [Internal Redis Server](#internal-redis-server)
-        - [External Redis Server](#external-redis-server)
-        - [Linking to Redis Container](#linking-to-redis-container)
-    - [Mail](#mail)
-        - [Microsoft Graph Mailer](#microsoft-graph-mailer)
-        - [Reply by email](#reply-by-email)
-    - [SSL](#ssl)
-        - [Generation of a Self Signed Certificate](#generation-of-a-self-signed-certificate)
-        - [Strengthening the server security](#strengthening-the-server-security)
-        - [Installation of the SSL Certificates](#installation-of-the-ssl-certificates)
-        - [Enabling HTTPS support](#enabling-https-support)
-        - [Configuring HSTS](#configuring-hsts)
-        - [Using HTTPS with a load balancer](#using-https-with-a-load-balancer)
-        - [Establishing trust with your server](#establishing-trust-with-your-server)
-        - [Installing Trusted SSL Server Certificates](#installing-trusted-ssl-server-certificates)
-    - [Deploy to a subdirectory (relative url root)](#deploy-to-a-subdirectory-relative-url-root)
-    - [OmniAuth Integration](#omniauth-integration)
-        - [CAS3](#cas3)
-        - [Authentiq](#authentiq)
-        - [Google](#google)
-        - [Twitter](#twitter)
-        - [GitHub](#github)
-        - [GitLab](#gitlab)
-        - [BitBucket](#bitbucket)
-        - [SAML](#saml)
-        - [Crowd](#crowd)
-        - [Microsoft Azure](#microsoft-azure)
-        - [Generic OAuth2](#generic-oauth2)
-        - [OpenID Connect](#openid-connect)
-        - [JWT](#jwt)
-    - [Gitlab Pages](#gitlab-pages)
-    - [External Issue Trackers](#external-issue-trackers)
-    - [Host UID / GID Mapping](#host-uid--gid-mapping)
-    - [Piwik](#piwik)
-    - [Feature flags](#feature-flags)
-    - [Exposing ssh port in dockerized gitlab-ce](docs/exposing-ssh-port.md)
-    - [Available Configuration Parameters](#available-configuration-parameters)
+  - [Data Store](#data-store)
+  - [Database](#database)
+    - [PostgreSQL (Recommended)](#postgresql)
+      - [External PostgreSQL Server](#external-postgresql-server)
+      - [Linking to PostgreSQL Container](#linking-to-postgresql-container)
+      - [Upgrading PostgreSQL](#upgrading-postgresql)
+  - [Redis](#redis)
+    - [Internal Redis Server](#internal-redis-server)
+    - [External Redis Server](#external-redis-server)
+    - [Linking to Redis Container](#linking-to-redis-container)
+  - [Mail](#mail)
+    - [Microsoft Graph Mailer](#microsoft-graph-mailer)
+    - [Reply by email](#reply-by-email)
+  - [SSL](#ssl)
+    - [Generation of a Self Signed Certificate](#generation-of-a-self-signed-certificate)
+    - [Strengthening the server security](#strengthening-the-server-security)
+    - [Installation of the SSL Certificates](#installation-of-the-ssl-certificates)
+    - [Enabling HTTPS support](#enabling-https-support)
+    - [Configuring HSTS](#configuring-hsts)
+    - [Using HTTPS with a load balancer](#using-https-with-a-load-balancer)
+    - [Establishing trust with your server](#establishing-trust-with-your-server)
+    - [Installing Trusted SSL Server Certificates](#installing-trusted-ssl-server-certificates)
+  - [Deploy to a subdirectory (relative url root)](#deploy-to-a-subdirectory-relative-url-root)
+  - [OmniAuth Integration](#omniauth-integration)
+    - [CAS3](#cas3)
+    - [Authentiq](#authentiq)
+    - [Google](#google)
+    - [Twitter](#twitter)
+    - [GitHub](#github)
+    - [GitLab](#gitlab)
+    - [BitBucket](#bitbucket)
+    - [SAML](#saml)
+    - [Crowd](#crowd)
+    - [Microsoft Azure](#microsoft-azure)
+    - [Generic OAuth2](#generic-oauth2)
+    - [OpenID Connect](#openid-connect)
+    - [JWT](#jwt)
+  - [Gitlab Pages](#gitlab-pages)
+  - [External Issue Trackers](#external-issue-trackers)
+  - [Host UID / GID Mapping](#host-uid--gid-mapping)
+  - [Piwik](#piwik)
+  - [Feature flags](#feature-flags)
+  - [Exposing ssh port in dockerized gitlab-ce](docs/exposing-ssh-port.md)
+  - [Available Configuration Parameters](#available-configuration-parameters)
 - [Maintenance](#maintenance)
-    - [Creating Backups](#creating-backups)
-    - [Restoring Backups](#restoring-backups)
-    - [Automated Backups](#automated-backups)
-    - [Amazon Web Services (AWS) Remote Backups](#amazon-web-services-aws-remote-backups)
-    - [Google Cloud Storage (GCS) Remote Backups](#google-cloud-storage-gcs-remote-backups)
-    - [Rake Tasks](#rake-tasks)
-    - [Import Repositories](#import-repositories)
-    - [Upgrading](#upgrading)
-    - [Shell Access](#shell-access)
+  - [Creating Backups](#creating-backups)
+  - [Restoring Backups](#restoring-backups)
+  - [Automated Backups](#automated-backups)
+  - [Amazon Web Services (AWS) Remote Backups](#amazon-web-services-aws-remote-backups)
+  - [Google Cloud Storage (GCS) Remote Backups](#google-cloud-storage-gcs-remote-backups)
+  - [Rake Tasks](#rake-tasks)
+  - [Import Repositories](#import-repositories)
+  - [Upgrading](#upgrading)
+  - [Shell Access](#shell-access)
 - [Monitoring](#monitoring)
-    - [Health Check](#health-check)
+  - [Health Check](#health-check)
 - [Container Registry](docs/container_registry.md)
 - [Deploy in Docker Swarm mode, with HTTPS handled by Traefik proxy and Docker Registry](docs/docker-swarm-traefik-registry.md)
 - [References](#references)
@@ -276,7 +276,7 @@ Configuring gitlab::database
 
 Please note furthermore, that only compatible versions of the `postgresql-client` to GitLab are shipped with this image. Currently, these belong to
 
-- `postgresql-client-17` and 
+- `postgresql-client-17` and
 - `postgresql-client-18` (not officially supported).
 
 ***Notes:***
@@ -805,7 +805,6 @@ To use JWT set at least `OAUTH_JWT_SECRET` and `OAUTH_JWT_AUTH_URL`.
 | `auth_url`                     | `OAUTH_JWT_AUTH_URL`                |                                |
 | `valid_within`                 | `OAUTH_JWT_VALID_WITHIN`            | `3600`                         |
 
-
 See [OmniAuth JWT documentation](https://docs.gitlab.com/administration/auth/jwt/).
 
 #### Gitlab Pages
@@ -823,11 +822,11 @@ GitLab pages access control makes use of the Gitlab OAuth Module.
 - Goto the Gitlab Admin area
 - Select `Applications` in the menu
 - Create `New Application`
-    - Name: `Gitlab Pages`
-    - Scopes:
-        - api
-    - Trusted: NO (Do not select)
-    - Redirect URI: `https://projects.<GITLAB_PAGES_DOMAIN>/auth`
+  - Name: `Gitlab Pages`
+  - Scopes:
+    - api
+  - Trusted: NO (Do not select)
+  - Redirect URI: `https://projects.<GITLAB_PAGES_DOMAIN>/auth`
 
 Note about the `Redirect URI`; this can be tricky to configure or figure out, What needs to be achieved is the following, the redirect URI needs to end up at the `gitlab-pages` daemon with the `/auth` endpoint.
 
