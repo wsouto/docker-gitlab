@@ -26,6 +26,7 @@ This repo packages GitLab CE into a Docker image. It is **not** the GitLab appli
 All upstream artifacts are pinned with sha256 checksums that are **verified at build time** via `sha256sum -c -`. When bumping a version you MUST update both the version ENV and its `*_SHA256SUM` in the `Dockerfile` ENV block, or the build fails the checksum check.
 
 Versions in the Dockerfile ENV block:
+
 - `GITLAB_VERSION` (also update `VERSION` file) — gitlab-foss tag.
 - `GITLAB_SHELL_VERSION`, `GITLAB_PAGES_VERSION`, `GITALY_SERVER_VERSION` — usually bumped together with GitLab.
 - `RUBY_VERSION` + `RUBY_PREBUILT_REVISION` + `RUBY_PREBUILT_SHA256SUM` — prebuilt binary from `jdx/ruby` GitHub releases.
